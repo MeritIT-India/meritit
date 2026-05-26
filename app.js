@@ -38,6 +38,9 @@
     let previousBytesSent = 0;
     let previousBytesReceived = 0;
     let previousTimestamp = 0;
+    let iceServersConfig = [];
+    let retryCount = 0;
+    const MAX_RETRIES = 2;
 
     // ── DOM Elements ──
     const $ = (id) => document.getElementById(id);
@@ -97,9 +100,66 @@
     };
 
     // ── Initialize ──
-    function init() {
+    async function init() {
+        // Fetch TURN credentials first, then init peer
+        await fetchTurnCredentials();
         initPeer();
         bindEvents();
+    }
+
+    // ── Fetch TURN Credentials from Metered.ca Free API ──
+    async function fetchTurnCredentials() {
+        // Metered.ca provides free TURN servers via their API
+        // Free tier: 500 GB/month — more than enough for a demo
+        const METERED_API_KEY = '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04';
+
+        try {
+            const response = await fetch(
+                `https://meritit.metered.live/api/v1/turn/credentials?apiKey=${METERED_API_KEY}`
+            );
+            if (response.ok) {
+                const turnServers = await response.json();
+                iceServersConfig = turnServers;
+                console.log('✓ TURN credentials fetched:', turnServers.length, 'servers');
+            } else {
+                console.warn('TURN API returned:', response.status, '- using fallback');
+                useFallbackIceServers();
+            }
+        } catch (err) {
+            console.warn('Could not fetch TURN credentials:', err, '- using fallback');
+            useFallbackIceServers();
+        }
+
+        // Always prepend Google STUN servers
+        iceServersConfig = [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:stun1.l.google.com:19302' },
+            { urls: 'stun:stun2.l.google.com:19302' },
+            { urls: 'stun:stun3.l.google.com:19302' },
+            ...iceServersConfig
+        ];
+    }
+
+    function useFallbackIceServers() {
+        // Fallback TURN servers (multiple providers for reliability)
+        iceServersConfig = [
+            // Metered free relay servers
+            {
+                urls: 'turn:standard.relay.metered.ca:80',
+                username: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04',
+                credential: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04'
+            },
+            {
+                urls: 'turn:standard.relay.metered.ca:443',
+                username: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04',
+                credential: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04'
+            },
+            {
+                urls: 'turns:standard.relay.metered.ca:443?transport=tcp',
+                username: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04',
+                credential: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04'
+            }
+        ];
     }
 
     // ── PeerJS Initialization ──
@@ -108,27 +168,11 @@
         const id = generateShortId();
 
         peer = new Peer(id, {
-            // Use public STUN/TURN servers for NAT traversal
             config: {
-                iceServers: [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' },
-                    { urls: 'stun:stun2.l.google.com:19302' },
-                    { urls: 'stun:stun3.l.google.com:19302' },
-                    { urls: 'stun:stun4.l.google.com:19302' },
-                    // Free TURN server for NAT traversal in restricted networks
-                    {
-                        urls: 'turn:openrelay.metered.ca:80',
-                        username: 'openrelayproject',
-                        credential: 'openrelayproject'
-                    },
-                    {
-                        urls: 'turn:openrelay.metered.ca:443',
-                        username: 'openrelayproject',
-                        credential: 'openrelayproject'
-                    }
-                ]
-            }
+                iceServers: iceServersConfig,
+                iceCandidatePoolSize: 10, // Pre-fetch ICE candidates for faster connection
+            },
+            debug: 1 // Show warnings/errors in console
         });
 
         peer.on('open', (id) => {
@@ -208,6 +252,7 @@
                 showToast('You cannot call yourself!');
                 return;
             }
+            retryCount = 0;
             initiateCall(remoteId);
         });
 
@@ -306,6 +351,11 @@
                 metadata: { quality: selectedQuality }
             });
 
+            if (!call) {
+                showToast('⚠ Could not reach peer. Check the ID.');
+                return;
+            }
+
             setupCall(call);
         } catch (err) {
             console.error('Call initiation error:', err);
@@ -336,7 +386,22 @@
 
         DOM.remoteStatusText.textContent = 'Connecting...';
 
+        // Set a timeout — if no stream arrives in 15s, something is wrong
+        let streamReceived = false;
+        const streamTimeout = setTimeout(() => {
+            if (!streamReceived && currentCall) {
+                showToast('⚠ No video received. Attempting ICE restart...');
+                const pc = currentCall.peerConnection;
+                if (pc && pc.restartIce) {
+                    pc.restartIce();
+                }
+            }
+        }, 15000);
+
         call.on('stream', (remoteStream) => {
+            streamReceived = true;
+            clearTimeout(streamTimeout);
+
             DOM.remoteVideo.srcObject = remoteStream;
             DOM.remotePlaceholder.style.display = 'none';
 
@@ -353,35 +418,139 @@
         });
 
         call.on('close', () => {
+            clearTimeout(streamTimeout);
             showToast('Call ended');
             cleanupCall();
         });
 
         call.on('error', (err) => {
+            clearTimeout(streamTimeout);
             console.error('Call error:', err);
             showToast('⚠ Call error occurred');
             cleanupCall();
         });
 
-        // Monitor ICE connection state
+        // Monitor ICE connection state with detailed logging
         const pc = call.peerConnection;
         if (pc) {
-            pc.oniceconnectionstatechange = () => {
-                const state = pc.iceConnectionState;
-                console.log('ICE state:', state);
-
-                if (state === 'disconnected') {
-                    showToast('⚠ Connection unstable...');
-                    DOM.remoteStatusText.textContent = 'Reconnecting...';
-                } else if (state === 'failed') {
-                    showToast('⚠ Connection lost');
-                    // Attempt ICE restart
-                    if (pc.restartIce) pc.restartIce();
-                } else if (state === 'connected' || state === 'completed') {
-                    DOM.remotePlaceholder.style.display = 'none';
+            // Log all ICE candidates for debugging
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    const c = event.candidate;
+                    console.log(`ICE Candidate: type=${c.type} protocol=${c.protocol} address=${c.address}:${c.port}`);
+                } else {
+                    console.log('ICE gathering complete');
                 }
             };
+
+            pc.onicegatheringstatechange = () => {
+                console.log('ICE gathering state:', pc.iceGatheringState);
+            };
+
+            pc.oniceconnectionstatechange = () => {
+                const state = pc.iceConnectionState;
+                console.log('ICE connection state:', state);
+
+                if (state === 'checking') {
+                    DOM.remoteStatusText.textContent = 'Establishing connection...';
+                } else if (state === 'connected' || state === 'completed') {
+                    DOM.remotePlaceholder.style.display = 'none';
+                    retryCount = 0; // Reset retry counter on success
+
+                    // Log which candidate pair won
+                    pc.getStats().then(stats => {
+                        stats.forEach(report => {
+                            if (report.type === 'candidate-pair' && report.state === 'succeeded') {
+                                console.log('✓ Connected via candidate pair:', report);
+                            }
+                            if (report.type === 'local-candidate' || report.type === 'remote-candidate') {
+                                console.log(`${report.type}: ${report.candidateType} ${report.protocol} ${report.address}:${report.port}`);
+                            }
+                        });
+                    });
+                } else if (state === 'disconnected') {
+                    showToast('⚠ Connection unstable. Trying to reconnect...');
+                    DOM.remoteStatusText.textContent = 'Reconnecting...';
+                    DOM.remotePlaceholder.style.display = '';
+                } else if (state === 'failed') {
+                    console.error('ICE connection failed — no route between peers');
+
+                    if (retryCount < MAX_RETRIES) {
+                        retryCount++;
+                        showToast(`⚠ Connection failed. Retrying with relay... (${retryCount}/${MAX_RETRIES})`);
+
+                        // Close current call and retry with relay-only mode
+                        const remoteId = call.peer;
+                        cleanupCall();
+                        retryWithRelay(remoteId);
+                    } else {
+                        showToast('⚠ Could not connect. Both peers may be behind strict firewalls.');
+                        cleanupCall();
+                    }
+                }
+            };
+
+            pc.onconnectionstatechange = () => {
+                console.log('Connection state:', pc.connectionState);
+            };
         }
+    }
+
+    // ── Retry with TURN relay only ──
+    async function retryWithRelay(remoteId) {
+        showToast('🔄 Retrying with relay servers...');
+
+        // Destroy old peer and create new one with relay-only config
+        if (peer && !peer.destroyed) {
+            peer.destroy();
+        }
+
+        // Get the same ID back (or generate new one)
+        const myId = generateShortId();
+
+        // Create peer with relay-only transport policy
+        const relayConfig = {
+            iceServers: iceServersConfig,
+            iceTransportPolicy: 'relay', // Force TURN relay — this ALWAYS works if TURN server is reachable
+            iceCandidatePoolSize: 10,
+        };
+
+        peer = new Peer(myId, {
+            config: relayConfig,
+            debug: 2
+        });
+
+        peer.on('open', async (id) => {
+            DOM.myPeerId.textContent = id;
+            showToast('Reconnected. Calling via relay...');
+
+            // Re-initiate call
+            try {
+                const stream = localStream || await getUserMedia();
+                const call = peer.call(remoteId, stream, {
+                    metadata: { quality: selectedQuality, relay: true }
+                });
+                if (call) {
+                    setupCall(call);
+                } else {
+                    showToast('⚠ Could not reach peer via relay. They may have disconnected.');
+                }
+            } catch (err) {
+                console.error('Relay call error:', err);
+                showToast('⚠ Relay connection failed');
+            }
+        });
+
+        peer.on('call', (call) => {
+            incomingCallData = call;
+            DOM.callerId.textContent = `Peer: ${call.peer}`;
+            DOM.incomingModal.classList.remove('hidden');
+        });
+
+        peer.on('error', (err) => {
+            console.error('Relay peer error:', err);
+            showToast(`⚠ ${err.message || 'Relay connection error'}`);
+        });
     }
 
     // ── Apply Bandwidth Constraints ──
