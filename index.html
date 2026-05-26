@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MeritIT — Ultra-fast peer-to-peer 1:1 video calling optimized for low-bandwidth networks. No servers, no downloads, just connect.">
+    <title>MeritIT — P2P Video Call</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-animation">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+    </div>
+
+    <!-- ===== LANDING / LOBBY ===== -->
+    <div id="lobby-screen" class="screen active">
+        <div class="lobby-container">
+            <header class="lobby-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 40 40" fill="none">
+                            <circle cx="20" cy="20" r="18" stroke="url(#logoGrad)" stroke-width="2.5"/>
+                            <path d="M14 16 L20 12 L26 16 L26 24 L20 28 L14 24Z" stroke="url(#logoGrad)" stroke-width="2" stroke-linejoin="round"/>
+                            <circle cx="20" cy="20" r="4" fill="url(#logoGrad)"/>
+                            <defs>
+                                <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                                    <stop offset="0%" stop-color="#6C5CE7"/>
+                                    <stop offset="100%" stop-color="#00D2FF"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h1>MeritIT</h1>
+                </div>
+                <p class="tagline">Peer-to-Peer Video Calls · Zero Latency · Low Bandwidth</p>
+            </header>
+
+            <div class="lobby-card glass-card">
+                <!-- Your ID Section -->
+                <div class="id-section">
+                    <label class="section-label">Your Room ID</label>
+                    <div class="id-display">
+                        <span id="my-peer-id" class="peer-id-text">Connecting...</span>
+                        <button id="copy-id-btn" class="btn-icon" title="Copy ID" disabled>
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2"/>
+                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="id-hint">Share this ID with the person you want to call</p>
+                </div>
+
+                <div class="divider">
+                    <span>or</span>
+                </div>
+
+                <!-- Connect Section -->
+                <div class="connect-section">
+                    <label class="section-label">Join a Call</label>
+                    <div class="connect-input-group">
+                        <input type="text" id="remote-peer-id" placeholder="Enter their Room ID" autocomplete="off" spellcheck="false"/>
+                        <button id="call-btn" class="btn-primary" disabled>
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+                            </svg>
+                            <span>Call</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div class="settings-section">
+                    <label class="section-label">Network Mode</label>
+                    <div class="quality-selector">
+                        <button class="quality-btn" data-quality="low">
+                            <span class="quality-icon">📡</span>
+                            <span class="quality-name">Low BW</span>
+                            <span class="quality-desc">240p · 15fps</span>
+                        </button>
+                        <button class="quality-btn active" data-quality="medium">
+                            <span class="quality-icon">📶</span>
+                            <span class="quality-name">Balanced</span>
+                            <span class="quality-desc">480p · 24fps</span>
+                        </button>
+                        <button class="quality-btn" data-quality="high">
+                            <span class="quality-icon">🚀</span>
+                            <span class="quality-name">HD</span>
+                            <span class="quality-desc">720p · 30fps</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lobby-footer">
+                <p>End-to-end encrypted · No data stored · Works on any browser</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- ===== CALL SCREEN ===== -->
+    <div id="call-screen" class="screen">
+        <div class="call-container">
+            <!-- Remote Video (large) -->
+            <div id="remote-video-wrapper" class="video-wrapper remote-video-wrapper">
+                <video id="remote-video" autoplay playsinline></video>
+                <div id="remote-placeholder" class="video-placeholder">
+                    <div class="placeholder-avatar">
+                        <svg viewBox="0 0 80 80" fill="none">
+                            <circle cx="40" cy="30" r="14" stroke="currentColor" stroke-width="2.5"/>
+                            <path d="M12 68 C12 52 28 44 40 44 C52 44 68 52 68 68" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <p id="remote-status-text">Waiting for peer...</p>
+                </div>
+                <!-- Network stats overlay -->
+                <div id="network-stats" class="network-stats hidden">
+                    <div class="stat">
+                        <span class="stat-label">Latency</span>
+                        <span id="stat-latency" class="stat-value">--</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Bitrate</span>
+                        <span id="stat-bitrate" class="stat-value">--</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Loss</span>
+                        <span id="stat-packet-loss" class="stat-value">--</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">FPS</span>
+                        <span id="stat-fps" class="stat-value">--</span>
+                    </div>
+                </div>
+                <!-- Connection quality indicator -->
+                <div id="connection-quality" class="connection-quality">
+                    <div class="quality-bar"></div>
+                    <div class="quality-bar"></div>
+                    <div class="quality-bar"></div>
+                    <div class="quality-bar"></div>
+                </div>
+            </div>
+
+            <!-- Local Video (PiP) -->
+            <div id="local-video-wrapper" class="video-wrapper local-video-wrapper">
+                <video id="local-video" autoplay playsinline muted></video>
+            </div>
+
+            <!-- Call Timer -->
+            <div id="call-timer" class="call-timer">
+                <div class="timer-dot"></div>
+                <span id="timer-text">00:00</span>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls-bar">
+                <div class="controls-group">
+                    <button id="toggle-mic" class="control-btn" title="Toggle Microphone">
+                        <svg id="mic-on-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+                            <path d="M19 10v2a7 7 0 01-14 0v-2"/>
+                            <line x1="12" y1="19" x2="12" y2="23"/>
+                            <line x1="8" y1="23" x2="16" y2="23"/>
+                        </svg>
+                        <svg id="mic-off-icon" class="hidden" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                            <path d="M9 9v3a3 3 0 005.12 2.12M15 9.34V4a3 3 0 00-5.94-.6"/>
+                            <path d="M17 16.95A7 7 0 015 12v-2m14 0v2c0 .76-.12 1.5-.35 2.18"/>
+                            <line x1="12" y1="19" x2="12" y2="23"/>
+                            <line x1="8" y1="23" x2="16" y2="23"/>
+                        </svg>
+                    </button>
+
+                    <button id="toggle-video" class="control-btn" title="Toggle Camera">
+                        <svg id="video-on-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="23 7 16 12 23 17 23 7"/>
+                            <rect x="1" y="5" width="15" height="14" rx="2"/>
+                        </svg>
+                        <svg id="video-off-icon" class="hidden" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 16v1a2 2 0 01-2 2H3a2 2 0 01-2-2V7a2 2 0 012-2h2m5.66 0H14a2 2 0 012 2v3.34l1 1L23 7v10"/>
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                        </svg>
+                    </button>
+
+                    <button id="toggle-stats" class="control-btn" title="Network Stats">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 20V10"/>
+                            <path d="M12 20V4"/>
+                            <path d="M6 20v-6"/>
+                        </svg>
+                    </button>
+
+                    <button id="toggle-screen" class="control-btn" title="Share Screen">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2"/>
+                            <line x1="8" y1="21" x2="16" y2="21"/>
+                            <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                    </button>
+
+                    <button id="hang-up" class="control-btn hang-up" title="End Call">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M10.68 13.31a16 16 0 003.41 2.6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91"/>
+                            <line x1="23" y1="1" x2="1" y2="23"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Incoming call modal -->
+    <div id="incoming-call-modal" class="modal hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content glass-card">
+            <div class="incoming-call-animation">
+                <div class="ring-pulse"></div>
+                <div class="ring-pulse ring-pulse-2"></div>
+                <div class="caller-avatar">
+                    <svg viewBox="0 0 60 60" fill="none">
+                        <circle cx="30" cy="22" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M10 52 C10 40 20 34 30 34 C40 34 50 40 50 52" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+            <h2>Incoming Call</h2>
+            <p id="caller-id">Someone is calling...</p>
+            <div class="modal-actions">
+                <button id="decline-call" class="btn-decline">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                    Decline
+                </button>
+                <button id="accept-call" class="btn-accept">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+                    </svg>
+                    Accept
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast hidden">
+        <span id="toast-text"></span>
+    </div>
+
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
