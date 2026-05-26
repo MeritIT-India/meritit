@@ -107,59 +107,70 @@
         bindEvents();
     }
 
-    // ── Fetch TURN Credentials from Metered.ca Free API ──
+    // ── Build ICE Server Config ──
+    // Uses Metered.ca Open Relay — free, no signup required (static auth)
+    // Docs: https://www.metered.ca/tools/openrelay/
     async function fetchTurnCredentials() {
-        // Metered.ca provides free TURN servers via their API
-        // Free tier: 500 GB/month — more than enough for a demo
-        const METERED_API_KEY = '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04';
-
-        try {
-            const response = await fetch(
-                `https://meritit.metered.live/api/v1/turn/credentials?apiKey=${METERED_API_KEY}`
-            );
-            if (response.ok) {
-                const turnServers = await response.json();
-                iceServersConfig = turnServers;
-                console.log('✓ TURN credentials fetched:', turnServers.length, 'servers');
-            } else {
-                console.warn('TURN API returned:', response.status, '- using fallback');
-                useFallbackIceServers();
-            }
-        } catch (err) {
-            console.warn('Could not fetch TURN credentials:', err, '- using fallback');
-            useFallbackIceServers();
-        }
-
-        // Always prepend Google STUN servers
+        // Static-auth TURN servers from openrelay.metered.ca
+        // No API key needed — free public relay (20 GB/month)
         iceServersConfig = [
+            // STUN servers
             { urls: 'stun:stun.l.google.com:19302' },
             { urls: 'stun:stun1.l.google.com:19302' },
             { urls: 'stun:stun2.l.google.com:19302' },
             { urls: 'stun:stun3.l.google.com:19302' },
-            ...iceServersConfig
-        ];
-    }
+            { urls: 'stun:stun4.l.google.com:19302' },
+            { urls: 'stun:openrelay.metered.ca:80' },
 
-    function useFallbackIceServers() {
-        // Fallback TURN servers (multiple providers for reliability)
-        iceServersConfig = [
-            // Metered free relay servers
+            // TURN via UDP port 80
             {
-                urls: 'turn:standard.relay.metered.ca:80',
-                username: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04',
-                credential: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04'
+                urls: 'turn:openrelay.metered.ca:80',
+                username: 'openrelayproject',
+                credential: 'openrelayprojectsecret'
+            },
+            // TURN via TCP port 80
+            {
+                urls: 'turn:openrelay.metered.ca:80?transport=tcp',
+                username: 'openrelayproject',
+                credential: 'openrelayprojectsecret'
+            },
+            // TURN via UDP port 443
+            {
+                urls: 'turn:openrelay.metered.ca:443',
+                username: 'openrelayproject',
+                credential: 'openrelayprojectsecret'
+            },
+            // TURNS (TLS) via port 443 — penetrates deep-packet-inspection firewalls
+            {
+                urls: 'turns:openrelay.metered.ca:443',
+                username: 'openrelayproject',
+                credential: 'openrelayprojectsecret'
+            },
+            // TURN via TCP port 443
+            {
+                urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+                username: 'openrelayproject',
+                credential: 'openrelayprojectsecret'
+            },
+            // Static auth URL variant (used by Matrix/Nextcloud)
+            {
+                urls: 'turn:staticauth.openrelay.metered.ca:80',
+                username: 'openrelayproject',
+                credential: 'openrelayprojectsecret'
             },
             {
-                urls: 'turn:standard.relay.metered.ca:443',
-                username: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04',
-                credential: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04'
+                urls: 'turn:staticauth.openrelay.metered.ca:443',
+                username: 'openrelayproject',
+                credential: 'openrelayprojectsecret'
             },
             {
-                urls: 'turns:standard.relay.metered.ca:443?transport=tcp',
-                username: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04',
-                credential: '0ec37abe0de0c026aa1f2ce1f2a3e4ae1e04'
+                urls: 'turns:staticauth.openrelay.metered.ca:443',
+                username: 'openrelayproject',
+                credential: 'openrelayprojectsecret'
             }
         ];
+
+        console.log('✓ ICE servers ready:', iceServersConfig.length, 'servers configured');
     }
 
     // ── PeerJS Initialization ──
