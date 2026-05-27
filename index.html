@@ -3,258 +3,518 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MeritIT — Ultra-fast peer-to-peer 1:1 video calling optimized for low-bandwidth networks. No servers, no downloads, just connect.">
-    <title>MeritIT — P2P Video Call</title>
+    <title>Meritit — 1:1 Live TNPSC Coaching from Officers Who Made It</title>
+    <meta name="description" content="Connect with TNPSC-cleared officers for personalized 1:1 live coaching. Aspirants learn from real professionals. Tutors earn by teaching. Plans from ₹499.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
-    <!-- Animated background -->
-    <div class="bg-animation">
-        <div class="bg-orb bg-orb-1"></div>
-        <div class="bg-orb bg-orb-2"></div>
-        <div class="bg-orb bg-orb-3"></div>
-    </div>
 
-    <!-- ===== LANDING / LOBBY ===== -->
-    <div id="lobby-screen" class="screen active">
-        <div class="lobby-container">
-            <header class="lobby-header">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <svg viewBox="0 0 40 40" fill="none">
-                            <circle cx="20" cy="20" r="18" stroke="url(#logoGrad)" stroke-width="2.5"/>
-                            <path d="M14 16 L20 12 L26 16 L26 24 L20 28 L14 24Z" stroke="url(#logoGrad)" stroke-width="2" stroke-linejoin="round"/>
-                            <circle cx="20" cy="20" r="4" fill="url(#logoGrad)"/>
-                            <defs>
-                                <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
-                                    <stop offset="0%" stop-color="#6C5CE7"/>
-                                    <stop offset="100%" stop-color="#00D2FF"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    </div>
-                    <h1>MeritIT</h1>
-                </div>
-                <p class="tagline">Peer-to-Peer Video Calls · Zero Latency · Low Bandwidth</p>
-            </header>
-
-            <div class="lobby-card glass-card">
-                <!-- Your ID Section -->
-                <div class="id-section">
-                    <label class="section-label">Your Room ID</label>
-                    <div class="id-display">
-                        <span id="my-peer-id" class="peer-id-text">Connecting...</span>
-                        <button id="copy-id-btn" class="btn-icon" title="Copy ID" disabled>
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2"/>
-                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <p class="id-hint">Share this ID with the person you want to call</p>
-                </div>
-
-                <div class="divider">
-                    <span>or</span>
-                </div>
-
-                <!-- Connect Section -->
-                <div class="connect-section">
-                    <label class="section-label">Join a Call</label>
-                    <div class="connect-input-group">
-                        <input type="text" id="remote-peer-id" placeholder="Enter their Room ID" autocomplete="off" spellcheck="false"/>
-                        <button id="call-btn" class="btn-primary" disabled>
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
-                            </svg>
-                            <span>Call</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Settings -->
-                <div class="settings-section">
-                    <label class="section-label">Network Mode</label>
-                    <div class="quality-selector">
-                        <button class="quality-btn" data-quality="low">
-                            <span class="quality-icon">📡</span>
-                            <span class="quality-name">Low BW</span>
-                            <span class="quality-desc">240p · 15fps</span>
-                        </button>
-                        <button class="quality-btn active" data-quality="medium">
-                            <span class="quality-icon">📶</span>
-                            <span class="quality-name">Balanced</span>
-                            <span class="quality-desc">480p · 24fps</span>
-                        </button>
-                        <button class="quality-btn" data-quality="high">
-                            <span class="quality-icon">🚀</span>
-                            <span class="quality-name">HD</span>
-                            <span class="quality-desc">720p · 30fps</span>
-                        </button>
-                    </div>
-                </div>
+    <!-- ═══ NAVBAR ═══ -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">
+                <span class="logo-text"><span class="logo-merit">Merit</span><span class="logo-it">it</span></span>
+            </a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#pricing" class="nav-link">Plans</a>
+                <a href="#for-tutors" class="nav-link">Become a Tutor</a>
+                <a href="#testimonials" class="nav-link">Reviews</a>
+                <a href="#faq" class="nav-link">FAQ</a>
             </div>
-
-            <footer class="lobby-footer">
-                <p>End-to-end encrypted · No data stored · Works on any browser</p>
-            </footer>
-        </div>
-    </div>
-
-    <!-- ===== CALL SCREEN ===== -->
-    <div id="call-screen" class="screen">
-        <div class="call-container">
-            <!-- Remote Video (large) -->
-            <div id="remote-video-wrapper" class="video-wrapper remote-video-wrapper">
-                <video id="remote-video" autoplay playsinline></video>
-                <div id="remote-placeholder" class="video-placeholder">
-                    <div class="placeholder-avatar">
-                        <svg viewBox="0 0 80 80" fill="none">
-                            <circle cx="40" cy="30" r="14" stroke="currentColor" stroke-width="2.5"/>
-                            <path d="M12 68 C12 52 28 44 40 44 C52 44 68 52 68 68" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <p id="remote-status-text">Waiting for peer...</p>
-                </div>
-                <!-- Network stats overlay -->
-                <div id="network-stats" class="network-stats hidden">
-                    <div class="stat">
-                        <span class="stat-label">Latency</span>
-                        <span id="stat-latency" class="stat-value">--</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Bitrate</span>
-                        <span id="stat-bitrate" class="stat-value">--</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Loss</span>
-                        <span id="stat-packet-loss" class="stat-value">--</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">FPS</span>
-                        <span id="stat-fps" class="stat-value">--</span>
-                    </div>
-                </div>
-                <!-- Connection quality indicator -->
-                <div id="connection-quality" class="connection-quality">
-                    <div class="quality-bar"></div>
-                    <div class="quality-bar"></div>
-                    <div class="quality-bar"></div>
-                    <div class="quality-bar"></div>
-                </div>
-            </div>
-
-            <!-- Local Video (PiP) -->
-            <div id="local-video-wrapper" class="video-wrapper local-video-wrapper">
-                <video id="local-video" autoplay playsinline muted></video>
-            </div>
-
-            <!-- Call Timer -->
-            <div id="call-timer" class="call-timer">
-                <div class="timer-dot"></div>
-                <span id="timer-text">00:00</span>
-            </div>
-
-            <!-- Controls -->
-            <div class="controls-bar">
-                <div class="controls-group">
-                    <button id="toggle-mic" class="control-btn" title="Toggle Microphone">
-                        <svg id="mic-on-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
-                            <path d="M19 10v2a7 7 0 01-14 0v-2"/>
-                            <line x1="12" y1="19" x2="12" y2="23"/>
-                            <line x1="8" y1="23" x2="16" y2="23"/>
-                        </svg>
-                        <svg id="mic-off-icon" class="hidden" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="1" y1="1" x2="23" y2="23"/>
-                            <path d="M9 9v3a3 3 0 005.12 2.12M15 9.34V4a3 3 0 00-5.94-.6"/>
-                            <path d="M17 16.95A7 7 0 015 12v-2m14 0v2c0 .76-.12 1.5-.35 2.18"/>
-                            <line x1="12" y1="19" x2="12" y2="23"/>
-                            <line x1="8" y1="23" x2="16" y2="23"/>
-                        </svg>
-                    </button>
-
-                    <button id="toggle-video" class="control-btn" title="Toggle Camera">
-                        <svg id="video-on-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="23 7 16 12 23 17 23 7"/>
-                            <rect x="1" y="5" width="15" height="14" rx="2"/>
-                        </svg>
-                        <svg id="video-off-icon" class="hidden" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 16v1a2 2 0 01-2 2H3a2 2 0 01-2-2V7a2 2 0 012-2h2m5.66 0H14a2 2 0 012 2v3.34l1 1L23 7v10"/>
-                            <line x1="1" y1="1" x2="23" y2="23"/>
-                        </svg>
-                    </button>
-
-                    <button id="toggle-stats" class="control-btn" title="Network Stats">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M18 20V10"/>
-                            <path d="M12 20V4"/>
-                            <path d="M6 20v-6"/>
-                        </svg>
-                    </button>
-
-                    <button id="toggle-screen" class="control-btn" title="Share Screen">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="3" width="20" height="14" rx="2"/>
-                            <line x1="8" y1="21" x2="16" y2="21"/>
-                            <line x1="12" y1="17" x2="12" y2="21"/>
-                        </svg>
-                    </button>
-
-                    <button id="hang-up" class="control-btn hang-up" title="End Call">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path d="M10.68 13.31a16 16 0 003.41 2.6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91"/>
-                            <line x1="23" y1="1" x2="1" y2="23"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Incoming call modal -->
-    <div id="incoming-call-modal" class="modal hidden">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content glass-card">
-            <div class="incoming-call-animation">
-                <div class="ring-pulse"></div>
-                <div class="ring-pulse ring-pulse-2"></div>
-                <div class="caller-avatar">
-                    <svg viewBox="0 0 60 60" fill="none">
-                        <circle cx="30" cy="22" r="10" stroke="currentColor" stroke-width="2"/>
-                        <path d="M10 52 C10 40 20 34 30 34 C40 34 50 40 50 52" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </div>
-            </div>
-            <h2>Incoming Call</h2>
-            <p id="caller-id">Someone is calling...</p>
-            <div class="modal-actions">
-                <button id="decline-call" class="btn-decline">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                    Decline
-                </button>
-                <button id="accept-call" class="btn-accept">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
-                    </svg>
-                    Accept
+            <div class="nav-actions">
+                <a href="#pricing" class="btn btn-gold btn-nav">Get Started</a>
+                <button class="nav-burger" id="nav-burger" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
                 </button>
             </div>
         </div>
-    </div>
+        <!-- Looping Ticker Banner -->
+        <div class="navbar-ticker">
+            <div class="ticker-track">
+                <div class="ticker-content">
+                    <span>This demo website is made by <a href="https://www.instagram.com/vertexvicky/" target="_blank" rel="noopener noreferrer">vertexvicky</a></span>
+                    <span class="ticker-dot"></span>
+                    <span>This demo website is made by <a href="https://www.instagram.com/vertexvicky/" target="_blank" rel="noopener noreferrer">vertexvicky</a></span>
+                    <span class="ticker-dot"></span>
+                    <span>This demo website is made by <a href="https://www.instagram.com/vertexvicky/" target="_blank" rel="noopener noreferrer">vertexvicky</a></span>
+                    <span class="ticker-dot"></span>
+                    <span>This demo website is made by <a href="https://www.instagram.com/vertexvicky/" target="_blank" rel="noopener noreferrer">vertexvicky</a></span>
+                    <span class="ticker-dot"></span>
+                </div>
+                <div class="ticker-content" aria-hidden="true">
+                    <span>This demo website is made by <a href="https://www.instagram.com/vertexvicky/" target="_blank" rel="noopener noreferrer">vertexvicky</a></span>
+                    <span class="ticker-dot"></span>
+                    <span>This demo website is made by <a href="https://www.instagram.com/vertexvicky/" target="_blank" rel="noopener noreferrer">vertexvicky</a></span>
+                    <span class="ticker-dot"></span>
+                    <span>This demo website is made by <a href="https://www.instagram.com/vertexvicky/" target="_blank" rel="noopener noreferrer">vertexvicky</a></span>
+                    <span class="ticker-dot"></span>
+                    <span>This demo website is made by <a href="https://www.instagram.com/vertexvicky/" target="_blank" rel="noopener noreferrer">vertexvicky</a></span>
+                    <span class="ticker-dot"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-    <!-- Toast notification -->
-    <div id="toast" class="toast hidden">
-        <span id="toast-text"></span>
-    </div>
+    <!-- ═══ HERO ═══ -->
+    <section class="hero" id="hero">
+        <div class="hero-bg-glow hero-glow-1"></div>
+        <div class="hero-bg-glow hero-glow-2"></div>
+        <div class="container">
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <div class="hero-tag reveal">
+                        <span class="hero-tag-dot"></span>
+                        Tamil Nadu's #1 Personalised TNPSC Platform
+                    </div>
+                    <h1 class="hero-title reveal">
+                        Learn <span class="text-gold">1:1 Live</span> from Officers Who <span class="text-gold-gradient">Cleared TNPSC</span>
+                    </h1>
+                    <p class="hero-desc reveal">
+                        The platform connecting TNPSC aspirants with officers who already cleared the exam. Learn 1:1 from real professionals — or if you've cleared TNPSC, start teaching and earn.
+                    </p>
+                    <div class="hero-btns reveal">
+                        <a href="#pricing" class="btn btn-gold btn-lg">I'm an Aspirant →</a>
+                        <a href="#for-tutors" class="btn btn-outline btn-lg">I'm a Tutor</a>
+                    </div>
+                    <div class="hero-metrics reveal">
+                        <div class="metric">
+                            <div class="metric-val"><span data-count="1200">0</span><span>+</span></div>
+                            <div class="metric-label">Active Aspirants</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-val"><span data-count="150">0</span><span>+</span></div>
+                            <div class="metric-label">Verified Tutors</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-val"><span data-count="95">0</span><span>%</span></div>
+                            <div class="metric-label">Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual reveal">
+                    <div class="hero-card hero-card-back">
+                        <div class="hc-header">
+                            <div class="hc-avatar">R</div>
+                            <div><div class="hc-name">Rajesh K.</div><div class="hc-role">Group-1 Officer</div></div>
+                        </div>
+                    </div>
+                    <div class="hero-card hero-card-behind">
+                        <div class="hc-header">
+                            <div class="hc-avatar">S</div>
+                            <div><div class="hc-name">Sangeetha M.</div><div class="hc-role">Group-2 Officer</div></div>
+                        </div>
+                        <div class="hc-stars">★★★★☆</div>
+                    </div>
+                    <div class="hero-card hero-card-main">
+                        <div class="hc-header">
+                            <div class="hc-avatar">V</div>
+                            <div><div class="hc-name">Vignesh R.</div><div class="hc-role">Retired BDO · ★★★★★</div></div>
+                        </div>
+                        <div class="hc-subject">Tamil · Indian Polity</div>
+                        <div class="hc-meta">
+                            <span><span class="hc-live-dot"></span> Live Now</span>
+                            <span>1:1 Session</span>
+                            <span>58 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <!-- ═══ TRUST STRIP ═══ -->
+    <section class="trust-strip">
+        <div class="container">
+            <div class="trust-items reveal">
+                <div class="trust-chip">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Verified Officers
+                </div>
+                <div class="trust-chip">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Live 1:1 Video
+                </div>
+                <div class="trust-chip">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 7h6m-6 4h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Weekly Tests
+                </div>
+                <div class="trust-chip">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Secure Platform
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FEATURES — Bento Grid ═══ -->
+    <section class="section section-dark" id="features">
+        <div class="container">
+            <div class="section-header-center reveal">
+                <div class="section-label">Why Meritit</div>
+                <h2 class="section-heading">Everything You Need to <span class="text-gold">Crack TNPSC</span></h2>
+                <p class="section-desc">Personal mentorship + technology + proven strategies — the complete preparation ecosystem.</p>
+            </div>
+            <div class="bento-grid">
+                <div class="bento-card bento-wide reveal" id="feat-1on1">
+                    <div class="icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75M9 11a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h3>Personal 1:1 Live Sessions</h3>
+                    <p>No crowded classrooms. Get undivided attention from your tutor in private video sessions — tailored to your weak areas, your pace, and your schedule.</p>
+                </div>
+                <div class="bento-card reveal" id="feat-tutors">
+                    <div class="icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h3>Verified Tutors</h3>
+                    <p>Every tutor cleared TNPSC — from first-time repeaters to working officers and retired professionals.</p>
+                </div>
+                <div class="bento-card reveal" id="feat-tests">
+                    <div class="icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h3>Weekly Assessments</h3>
+                    <p>All aspirants take a weekly mock test — track progress, identify weak areas, stay exam-ready.</p>
+                </div>
+                <div class="bento-card reveal" id="feat-record">
+                    <div class="icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h3>Recorded Sessions</h3>
+                    <p>Revisit sessions anytime. Available on Standard & Priority plans for revision at your own pace.</p>
+                </div>
+                <div class="bento-card reveal" id="feat-ai">
+                    <div class="icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h3>AI Summaries</h3>
+                    <p>Priority members get auto-generated notes — key concepts, dates, and revision points after each session.</p>
+                </div>
+                <div class="bento-card reveal" id="feat-flex">
+                    <div class="icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h3>Flexible Scheduling</h3>
+                    <p>Fixed, flexible, or any-time — choose the schedule that fits your life based on your plan tier.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ HOW IT WORKS ═══ -->
+    <section class="section section-alt" id="how-it-works">
+        <div class="container">
+            <div class="section-header-center reveal">
+                <div class="section-label">Simple Process</div>
+                <h2 class="section-heading">Start in <span class="text-gold">3 Steps</span></h2>
+                <p class="section-desc">From sign-up to your first live class — it only takes minutes.</p>
+            </div>
+            <div class="steps-row">
+                <div class="step reveal">
+                    <div class="step-num">1</div>
+                    <h3>Choose Your Plan</h3>
+                    <p>Pick from Basic, Standard, or Priority based on your schedule and intensity.</p>
+                </div>
+                <div class="step reveal">
+                    <div class="step-num">2</div>
+                    <h3>Get Your Tutor</h3>
+                    <p>Browse verified TNPSC-cleared tutors. Choose one that fits your learning style.</p>
+                </div>
+                <div class="step reveal">
+                    <div class="step-num">3</div>
+                    <h3>Start Learning Live</h3>
+                    <p>Join private sessions, take weekly tests, track progress, ace TNPSC.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ PRICING ═══ -->
+    <section class="section section-dark" id="pricing">
+        <div class="container">
+            <div class="section-header-center reveal">
+                <div class="section-label">Plans</div>
+                <h2 class="section-heading">Invest in Your <span class="text-gold">Future</span></h2>
+                <p class="section-desc">Every plan includes weekly mock tests. Choose what fits you best.</p>
+            </div>
+            <div class="pricing-row">
+
+                <!-- Basic -->
+                <div class="plan reveal" id="plan-basic">
+                    <div class="plan-name">Basic</div>
+                    <div class="plan-price">
+                        <span class="cur">₹</span>
+                        <span class="amt">499</span>
+                        <span class="per">/mo</span>
+                    </div>
+                    <p class="plan-desc">Structured guidance with fixed schedules. Great to get started.</p>
+                    <ul class="plan-features">
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 1 hour per session</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Alternate days (3x/week)</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Up to 3-star tutors</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 1st time repeaters</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Weekly mock tests</li>
+                        <li class="off"><svg class="cross" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M4 12l8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Recorded sessions</li>
+                        <li class="off"><svg class="cross" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M4 12l8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> AI summaries</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline btn-full">Choose Basic</a>
+                </div>
+
+                <!-- Standard -->
+                <div class="plan plan-popular reveal" id="plan-standard">
+                    <div class="plan-badge">Most Popular</div>
+                    <div class="plan-name" style="margin-top: 18px;">Standard</div>
+                    <div class="plan-price">
+                        <span class="cur">₹</span>
+                        <span class="amt">599</span>
+                        <span class="per">/mo</span>
+                    </div>
+                    <p class="plan-desc">Flexible timing, better tutors, and recorded sessions for serious aspirants.</p>
+                    <ul class="plan-features">
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Choose your session time</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Alternate days (3x/week)</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Up to 4-star tutors</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 2–3 time repeaters</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Weekly mock tests</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Recorded sessions</li>
+                        <li class="off"><svg class="cross" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M4 12l8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> AI summaries</li>
+                    </ul>
+                    <a href="#" class="btn btn-gold btn-full">Choose Standard</a>
+                </div>
+
+                <!-- Priority -->
+                <div class="plan reveal" id="plan-priority">
+                    <div class="plan-name">Priority</div>
+                    <div class="plan-price">
+                        <span class="cur">₹</span>
+                        <span class="amt">799</span>
+                        <span class="per">/mo</span>
+                    </div>
+                    <p class="plan-desc">The ultimate — any day, any time, top-tier tutors, AI summaries, full flexibility.</p>
+                    <ul class="plan-features">
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Any day, any time</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Unlimited scheduling</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Up to 5-star tutors</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Working & retired officers</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Weekly mock tests</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Recorded sessions</li>
+                        <li><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> AI-powered summaries</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline btn-full">Choose Priority</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FOR TUTORS ═══ -->
+    <section class="section section-alt" id="for-tutors">
+        <div class="container">
+            <div class="section-header-left reveal">
+                <div class="section-label">For Tutors & Creators</div>
+                <h2 class="section-heading">Cleared TNPSC? <span class="text-gold">Teach & Earn</span></h2>
+                <p class="section-desc">You cracked the exam. Help others do the same — build steady income while making a real impact.</p>
+            </div>
+            <div class="tutor-split">
+                <div class="tutor-perks">
+                    <div class="perk reveal">
+                        <div class="perk-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <div>
+                            <h4>Earn on Your Terms</h4>
+                            <p>₹300–₹600+ per session. Set your availability, choose your students, teach as much or as little as you want.</p>
+                        </div>
+                    </div>
+                    <div class="perk reveal">
+                        <div class="perk-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke="currentColor" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <div>
+                            <h4>Zero Investment</h4>
+                            <p>No setup costs. Just your knowledge, a phone or laptop, and internet — we handle the platform and payments.</p>
+                        </div>
+                    </div>
+                    <div class="perk reveal">
+                        <div class="perk-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M22 12H18l-3 9L9 3l-3 9H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <div>
+                            <h4>Grow Your Reputation</h4>
+                            <p>Build your profile with student ratings. Top tutors get featured and attract more students automatically.</p>
+                        </div>
+                    </div>
+                    <div class="perk reveal">
+                        <div class="perk-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.501 5.501 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <div>
+                            <h4>Make Real Impact</h4>
+                            <p>Guide aspirants who are exactly where you once were. Your experience can change someone's career.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tutor-apply-card reveal">
+                    <h3>Who Can Join as a Tutor?</h3>
+                    <div class="tier-list">
+                        <div class="tier">
+                            <span class="tier-stars">★★★</span>
+                            <div class="tier-info">
+                                <strong>1st Time Repeaters</strong>
+                                <span>Cleared TNPSC at least once</span>
+                            </div>
+                        </div>
+                        <div class="tier">
+                            <span class="tier-stars">★★★★</span>
+                            <div class="tier-info">
+                                <strong>Experienced Repeaters</strong>
+                                <span>Cleared 2–3 times, deep expertise</span>
+                            </div>
+                        </div>
+                        <div class="tier">
+                            <span class="tier-stars">★★★★★</span>
+                            <div class="tier-info">
+                                <strong>Working & Retired Officers</strong>
+                                <span>Serving or retired govt. professionals</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-green btn-lg btn-full">Apply as a Tutor →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ TESTIMONIALS ═══ -->
+    <section class="section section-dark" id="testimonials">
+        <div class="container">
+            <div class="section-header-center reveal">
+                <div class="section-label">Success Stories</div>
+                <h2 class="section-heading">What Aspirants <span class="text-gold">Say</span></h2>
+            </div>
+            <div class="testimonials-col">
+                <div class="t-card reveal">
+                    <div class="t-stars">★★★★★</div>
+                    <p class="t-text">"My tutor was a Group-2 officer who cleared in her 2nd attempt. She understood exactly where I was struggling and helped me crack the exam in 6 months."</p>
+                    <div class="t-author">
+                        <div class="t-avatar">P</div>
+                        <div><div class="t-name">Priya Dharshini</div><div class="t-role">Cleared Group-4 · Chennai</div></div>
+                    </div>
+                </div>
+                <div class="t-card reveal">
+                    <div class="t-stars">★★★★★</div>
+                    <p class="t-text">"In coaching centres you can't ask doubts freely. Here, the entire hour is just for you. The weekly tests kept me accountable every single week."</p>
+                    <div class="t-author">
+                        <div class="t-avatar">K</div>
+                        <div><div class="t-name">Karthikeyan R</div><div class="t-role">Preparing Group-2 · Madurai</div></div>
+                    </div>
+                </div>
+                <div class="t-card reveal">
+                    <div class="t-stars">★★★★★</div>
+                    <p class="t-text">"The AI summaries after each session are incredibly helpful for revision. My tutor is a retired BDO who shares real-world insights no textbook can."</p>
+                    <div class="t-author">
+                        <div class="t-avatar">S</div>
+                        <div><div class="t-name">Surya Prakash</div><div class="t-role">Preparing Group-1 · Coimbatore</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FAQ ═══ -->
+    <section class="section section-alt" id="faq">
+        <div class="container">
+            <div class="section-header-center reveal">
+                <div class="section-label">FAQ</div>
+                <h2 class="section-heading">Common <span class="text-gold">Questions</span></h2>
+            </div>
+            <div class="faq-wrap">
+                <div class="faq-item reveal">
+                    <button class="faq-q"><span>Who are the tutors on Meritit?</span><svg class="faq-chevron" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75l4.5 4.5 4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    <div class="faq-a"><p>All tutors have cleared TNPSC themselves — ranging from first-time repeaters (3-star) to experienced professionals (4-star) and working/retired government officers (5-star). Every tutor is verified before joining.</p></div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-q"><span>How do the live 1:1 sessions work?</span><svg class="faq-chevron" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75l4.5 4.5 4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    <div class="faq-a"><p>You join a private video call with your assigned tutor. It's one-on-one — discuss topics, ask doubts, solve problems, get personalised guidance. Sessions are 1 hour long.</p></div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-q"><span>What are the weekly tests?</span><svg class="faq-chevron" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75l4.5 4.5 4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    <div class="faq-a"><p>Every week, all aspirants across all plans take a comprehensive mock test covering the TNPSC syllabus. Track your progress, identify weak areas, stay exam-ready.</p></div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-q"><span>Can I change my plan later?</span><svg class="faq-chevron" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75l4.5 4.5 4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    <div class="faq-a"><p>Yes. Upgrade anytime — you'll pay the prorated difference. Downgrades take effect from the next billing cycle.</p></div>
+                </div>
+                <div class="faq-item reveal">
+                    <button class="faq-q"><span>What are AI-powered summaries?</span><svg class="faq-chevron" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75l4.5 4.5 4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    <div class="faq-a"><p>Priority plan exclusive — AI auto-generates concise notes from each recorded session, highlighting key concepts, dates, formulas, and revision points.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CTA ═══ -->
+    <section class="section section-dark">
+        <div class="container">
+            <div class="cta-banner reveal">
+                <h2>Ready to Start Your <span class="text-gold">TNPSC Journey?</span></h2>
+                <p>Whether you're preparing for TNPSC or you've cleared it and want to teach — Meritit is your platform.</p>
+                <div class="cta-btns">
+                    <a href="#pricing" class="btn btn-gold btn-lg">Start Learning — ₹499/mo</a>
+                    <a href="#for-tutors" class="btn btn-dark btn-lg">Apply as a Tutor</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-cols">
+                <div class="footer-brand">
+                    <a href="#" class="nav-logo">
+                        <span class="logo-text"><span class="logo-merit">Merit</span><span class="logo-it">it</span></span>
+                    </a>
+                    <p>Tamil Nadu's premier platform for personalised 1:1 TNPSC coaching from verified officers and cleared aspirants.</p>
+                </div>
+                <div class="footer-col">
+                    <h5>Platform</h5>
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#testimonials">Reviews</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Support</h5>
+                    <a href="#faq">FAQ</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Connect</h5>
+                    <a href="#">Instagram</a>
+                    <a href="#">YouTube</a>
+                    <a href="#">Telegram</a>
+                    <a href="#">WhatsApp</a>
+                </div>
+            </div>
+            <div class="footer-bottom-bar">
+                © 2026 Meritit & vertexvicky. All rights reserved. Made with ❤️ in Tamil Nadu.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Creator Badge -->
+    <a href="https://www.instagram.com/vertexvicky/" target="_blank" rel="noopener noreferrer" class="creator-badge">
+        Created by <strong>vertexvicky</strong>
+    </a>
+
     <script src="app.js"></script>
 </body>
 </html>
